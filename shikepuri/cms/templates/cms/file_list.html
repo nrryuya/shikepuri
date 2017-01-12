@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load tags %}
+
+
+{% block title %}ファイルの一覧{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3 class="page-header">
+        <ul class="breadcrumb">
+        　<li><a href="{% url 'cms:file_list' %}" data-lb-orig-href="https://bootswatch.com/spacelab/#">全てのファイル</a></li>
+          {% if category %}
+          <li><a href="{% url 'cms:file_list' category=category %}" data-lb-orig-href="https://bootswatch.com/spacelab/#">{{ category }}</a></li>
+          {% endif %}
+          {% if subject %}
+          <li><a href="{% url 'cms:file_list' category=category subject=subject %}" data-lb-orig-href="https://bootswatch.com/spacelab/#">{{ subject_name }}</a></li>
+          {% endif %}
+        </ul>
+    </h3>
+
+    <div class="col-lg-3">
+      <div class="list-group">
+      {% for category in category_list %}
+        <a href="{% url 'cms:file_list' category=category %}" class="list-group-item disabled">
+          {{ category }}
+        </a>
+        {% with forloop.counter0 as cat_id %}
+        {% for subject in subject_list|return_item:cat_id %}
+        {% with forloop.counter0 as sub_id %}
+        <a href="{% url 'cms:file_list' category=category subject=subject %}" class="list-group-item">
+            {{ subject_name_list|return_item:cat_id|return_item:sub_id }}
+        </a>
+        {% endwith %}
+        {% endfor %}
+        {% endwith %}
+      {% endfor %}
+      </div>
+  </div>
+
+
+
+  <div class="col-lg-9">
+    <a href="{% url 'cms:file_add' %}" class="btn btn-default btn-sm">追加</a>
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr class="info">
+          <th>ID</th>
+          <th>ファイル名</th>
+          <th>授業名</th>
+          <th>教員名</th>
+          <th>作成者</th>
+          {# <th>ページ数</th>#}
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in files %}
+        <tr>
+          <td>{{ file.id }}</td>
+          <td>
+              <a href="{% url 'cms:file_content' file_id=file.id %}">{{ file.name }}</a>
+          </td>
+          <td>{{ file.class_name }}</td>
+          <td>{{ file.teacher }}</td>
+          <td>{{ file.author }}</td>
+          {# <td>{{ file.page }}</td>#}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

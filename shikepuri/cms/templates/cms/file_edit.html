@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block title %}ファイルの編集{% endblock title %}
+
+{% block content %}
+    <h3 class="page-header">ファイルの編集</h3>
+    {% if file_id %}
+    <form action="{% url 'cms:file_mod' file_id=file_id %}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+    {% else %}
+    <form action="{% url 'cms:file_add' %}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+    {% endif %}
+      {% csrf_token %}
+      {{ form|bootstrap_horizontal }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">送信</button>
+        </div>
+      </div>
+    </form>
+    <a href="{% url 'cms:file_list' %}" class="btn btn-default btn-sm">戻る</a>
+{% endblock content %}

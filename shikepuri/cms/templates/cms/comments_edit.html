@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block title %}コメント欄の編集{% endblock title %}
+
+{% block content %}
+    <h3 class="page-header">コメント欄の編集</h3>
+    {% if comments_id %}
+    <form action="{% url 'cms:comments_mod' file_id=file_id comments_id=comments_id %}" method="post" class="form-horizontal" role="form">
+    {% else %}
+    <form action="{% url 'cms:comments_add' file_id=file_id %}" method="post" class="form-horizontal" role="form">
+    {% endif %}
+      {% csrf_token %}
+      {{ form|bootstrap_horizontal }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">送信</button>
+        </div>
+      </div>
+    </form>
+    <a href="{% url 'cms:comments_list' file_id=file_id %}" class="btn btn-default btn-sm">戻る</a>
+{% endblock content %}
